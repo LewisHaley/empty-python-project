@@ -47,7 +47,7 @@ tests: venv
 	$(PYTHON_BIN) -m pytest
 .PHONY: tests
 
-ifeq ($(USE_VENV),no)
+ifeq ($(USE_VENV),yes)
 venv: venv/pyvenv.cfg
 venv/pyvenv.cfg: requirements.dev.txt
 	$(PYTHON_VER) -m venv --upgrade-deps venv
