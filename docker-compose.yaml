@@ -1,0 +1,66 @@
+---
+
+services:
+  base:
+    image: app:${IMAGE_TAG:-local}
+    build:
+      dockerfile: ./Dockerfile
+      args:
+        - REQUIREMENTS=requirements.prod.txt
+
+  develop:
+    image: app:develop
+    build:
+      dockerfile: ./Dockerfile
+      args:
+        - REQUIREMENTS=requirements.dev.txt
+    working_dir: /develop
+    volumes:
+      - type: bind
+        source: ./
+        target: /develop
+    environment:
+      - USE_VENV=no
+    command: bash
+
+  autoformat:
+    extends: develop
+    command: make autoformat
+
+  lint:
+    extends: develop
+    command: make lint
+
+  tests:
+    extends: develop
+    command: make tests
+
+  ci:
+    extends: develop
+    command: make ci
+
+  requirements.prod.txt:
+    image: piptools:latest
+    build:
+      dockerfile: ./Dockerfile.piptools
+    volumes:
+      - type: bind
+        source: ./
+        target: /project
+    working_dir: /project
+    command: >
+      python -m piptools compile
+      --output-file=requirements.prod.txt
+      pyproject.toml
+
+  requirements.dev.txt:
+    extends: requirements.prod.txt
+    command: >
+      python -m piptools compile
+      --extra=dev
+      --output-file=requirements.dev.txt
+      pyproject.toml
+
+  app:
+    extends: base
+    command: python -m empty_project

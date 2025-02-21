@@ -1,0 +1,31 @@
+FROM python:3.13.2-slim-bookworm
+
+ARG USER=dev
+ARG UID=1000
+ARG GID=1000
+
+RUN groupadd --gid=${GID} ${USER} \
+    && useradd --gid=${GID} --uid=${UID} --create-home ${USER}
+
+USER ${USER}
+WORKDIR /home/${USER}
+
+RUN pip install \
+        --user \
+        --no-cache \
+        --no-warn-script-location \
+        --progress-bar=off \
+        --upgrade \
+        wheel \
+        pip==24.* \
+        setuptools==75.* \
+    ;
+# Must be installed after pip is updated
+RUN pip install \
+        --user \
+        --no-cache \
+        --no-warn-script-location \
+        --progress-bar=off \
+        --upgrade \
+        pip-tools==7.* \
+    ;

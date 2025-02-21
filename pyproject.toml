@@ -1,0 +1,61 @@
+[project]
+name = "empty-project"
+description = "An empty project structure"
+version = "0.0.1"
+authors = [
+  {name = "Lewis Haley", email = "lewismhaley@gmail.com"},
+]
+maintainers = [
+  {name = "Lewis Haley", email = "lewismhaley@gmail.com"},
+]
+readme = "README.md"
+dependencies = [
+]
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools >= 65.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "pylint",
+    "pytest",
+]
+
+[tool.isort]
+profile = "black"
+src_paths = [
+    "src",
+    "tests",
+]
+
+[tool.pylint]
+max-line-length = 88
+load-plugins = [
+    "pylint.extensions.docparams",
+    "pylint.extensions.docstyle",
+]
+
+[tool.pylint.reports]
+score = false
+
+[tool.pylint.parameter-documentation]
+accept-no-param-doc = false
+accept-no-raise-doc = false
+accept-no-return-doc = false
+accept-no-yields-doc = false
+default-docstring-type = "sphinx"
+
+[tool.pytest]
+testpaths = [
+    "tests",
+]
+
+[tool.pip-tools]
+header = false
+annotation-style = "split"
+strip-extras = true
